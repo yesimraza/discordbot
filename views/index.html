@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raza-Bot Elite Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #8b5cf6;
+            --primary-glow: rgba(139, 92, 246, 0.5);
+            --secondary: #ec4899;
+            --bg: #030712;
+            --card-bg: rgba(17, 24, 39, 0.8);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: rgba(255, 255, 255, 0.08);
+            --success: #10b981;
+            --danger: #ef4444;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            min-height: 100vh;
+            margin: 0;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(139, 92, 246, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(236, 72, 153, 0.15) 0px, transparent 50%);
+        }
+
+        .navbar {
+            background: rgba(3, 7, 18, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .container {
+            max-width: 900px;
+            padding: 2rem 1rem;
+        }
+
+        .glass-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 2rem;
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
+            margin-bottom: 2rem;
+        }
+
+        .bot-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #a78bfa 0%, #f472b6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.25rem;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.5rem 1.25rem;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .status-online { background: rgba(16, 185, 129, 0.1); color: var(--success); border: 1px solid rgba(16, 185, 129, 0.2); box-shadow: 0 0 20px rgba(16, 185, 129, 0.1); }
+        .status-offline { background: rgba(239, 68, 68, 0.1); color: var(--danger); border: 1px solid rgba(239, 68, 68, 0.2); }
+
+        .form-label {
+            font-weight: 600;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .input-custom {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            color: white;
+            padding: 0.75rem 1rem;
+            width: 100%;
+            transition: all 0.2s ease;
+        }
+
+        .input-custom:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px var(--primary-glow);
+        }
+
+        .btn-elite {
+            border: none;
+            border-radius: 12px;
+            padding: 0.8rem 1.5rem;
+            font-weight: 700;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+
+        .btn-elite:active { transform: scale(0.95); }
+
+        .btn-primary-elite { background: var(--primary); color: white; box-shadow: 0 4px 15px var(--primary-glow); }
+        .btn-primary-elite:hover { background: #7c3aed; transform: translateY(-2px); }
+
+        .btn-success-elite { background: var(--success); color: white; }
+        .btn-danger-elite { background: var(--danger); color: white; }
+        
+        .log-container {
+            background: #000;
+            border-radius: 16px;
+            padding: 1.5rem;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            height: 300px;
+            overflow-y: auto;
+            border: 1px solid var(--border);
+            margin-top: 2rem;
+        }
+
+        .log-entry { margin-bottom: 0.5rem; border-left: 3px solid transparent; padding-left: 0.75rem; }
+        .log-info { border-color: var(--primary); color: #e2e8f0; }
+        .log-error { border-color: var(--danger); color: #f87171; }
+        .log-warn { border-color: #fbbf24; color: #fbbf24; }
+        .log-timestamp { color: var(--text-muted); font-size: 0.75rem; margin-right: 0.5rem; }
+
+        .control-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        @keyframes pulse-custom {
+            0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
+
+        .pulse-online { animation: pulse-custom 2s infinite; }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="container-fluid px-4 d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center gap-3">
+            <h1 class="bot-title m-0">Raza Elite</h1>
+            <div id="botStatus" class="status-badge status-offline">
+                <i class="fas fa-circle-notch fa-spin"></i> Initializing
+            </div>
+        </div>
+        <div class="text-muted small d-none d-md-block">System v4.5.0</div>
+    </div>
+</nav>
+
+<div class="container animate__animated animate__fadeIn">
+    <div class="glass-card">
+        <h4 class="mb-4"><i class="fas fa-sliders-h me-2"></i> Core Configuration</h4>
+        <form id="configForm">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label"><i class="fas fa-robot"></i> Bot Display Name</label>
+                    <input type="text" class="input-custom" id="botName" name="BOTNAME" placeholder="e.g. Raza Bot">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label"><i class="fas fa-user"></i> Admin Name</label>
+                    <input type="text" class="input-custom" id="adminName" name="ADMIN_NAME" placeholder="e.g. Raza">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label"><i class="fas fa-bolt"></i> Command Prefix</label>
+                    <input type="text" class="input-custom" id="prefix" name="PREFIX" placeholder="/">
+                </div>
+                <div class="col-12">
+                    <label class="form-label"><i class="fas fa-user-shield"></i> Master Administrators (UIDs)</label>
+                    <input type="text" class="input-custom" id="adminUid" name="ADMINBOT" placeholder="UID1, UID2, UID3">
+                </div>
+                <div class="col-12">
+                    <label class="form-label"><i class="fas fa-cookie-bite"></i> Facebook Cookies</label>
+                    <textarea class="input-custom" id="cookies" name="cookies" rows="3" placeholder="datr=xxx; sb=xxx; c_user=xxx; xs=xxx; ..."></textarea>
+                    <small class="text-muted mt-1 d-block">Paste your Facebook cookies here (not appstate)</small>
+                </div>
+                <div class="col-12" id="cookiesStatus"></div>
+                <div class="col-12 mt-4">
+                    <button type="submit" class="btn-elite btn-primary-elite w-100 py-3">
+                        <i class="fas fa-cloud-upload-alt"></i> Deploy & Save Changes
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="glass-card">
+        <h4 class="mb-4"><i class="fas fa-terminal me-2"></i> Control Center</h4>
+        <div class="control-grid">
+            <button id="startBtn" class="btn-elite btn-success-elite">
+                <i class="fas fa-play"></i> Launch Bot
+            </button>
+            <button id="stopBtn" class="btn-elite btn-danger-elite">
+                <i class="fas fa-power-off"></i> Terminate
+            </button>
+            <button id="clearAppStateBtn" class="btn-elite btn-danger-elite" style="background: rgba(239, 68, 68, 0.1); border: 1px solid var(--danger); color: var(--danger);">
+                <i class="fas fa-trash-alt"></i> Clear Session
+            </button>
+        </div>
+
+        <div class="log-container" id="logContainer">
+            <div class="text-muted italic">Waiting for logs...</div>
+        </div>
+    </div>
+
+    <footer class="text-center py-4 text-muted small">
+        &copy; 2026 Raza Engineering &bull; Pure Performance
+    </footer>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    const configForm = document.getElementById('configForm');
+    const logContainer = document.getElementById('logContainer');
+    const statusBadge = document.getElementById('botStatus');
+    
+    let lastLogLength = 0;
+
+    async function fetchUpdate() {
+        try {
+            const [configRes, logsRes, cookiesRes] = await Promise.all([
+                fetch('/api/config'),
+                fetch('/api/logs'),
+                fetch('/api/cookies-status')
+            ]);
+            
+            const configData = await configRes.json();
+            const logsData = await logsRes.json();
+            const cookiesData = await cookiesRes.json();
+
+            // Update Status
+            if (configData.isRunning) {
+                statusBadge.innerHTML = '<i class="fas fa-check-circle"></i> Operational';
+                statusBadge.className = 'status-badge status-online pulse-online';
+            } else {
+                statusBadge.innerHTML = '<i class="fas fa-times-circle"></i> Standby';
+                statusBadge.className = 'status-badge status-offline';
+            }
+
+            // Update Cookies Status
+            const cookiesStatusEl = document.getElementById('cookiesStatus');
+            if (cookiesData.hasCookies) {
+                cookiesStatusEl.innerHTML = `<small class="text-success"><i class="fas fa-check-circle"></i> Cookies Active (User: ${cookiesData.userId}) | Last updated: ${new Date(cookiesData.lastUpdated).toLocaleString()}</small>`;
+            } else {
+                cookiesStatusEl.innerHTML = `<small class="text-warning"><i class="fas fa-exclamation-triangle"></i> No cookies added yet</small>`;
+            }
+
+            // Update Form if not focused
+            if (!document.activeElement || (document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA')) {
+                if (configData.config) {
+                    document.getElementById('botName').value = configData.config.BOTNAME || '';
+                    document.getElementById('adminName').value = configData.config.ADMIN_NAME || configData.config.AMDIN_NAME || '';
+                    document.getElementById('prefix').value = configData.config.PREFIX || '';
+                    document.getElementById('adminUid').value = Array.isArray(configData.config.ADMINBOT) ? configData.config.ADMINBOT.join(', ') : '';
+                }
+            }
+
+            // Update Logs
+            if (logsData.logs.length !== lastLogLength) {
+                logContainer.innerHTML = logsData.logs.map(log => `
+                    <div class="log-entry log-${log.type}">
+                        <span class="log-timestamp">${log.timestamp}</span>
+                        ${log.message}
+                    </div>
+                `).join('');
+                logContainer.scrollTop = logContainer.scrollHeight;
+                lastLogLength = logsData.logs.length;
+            }
+
+        } catch (e) { console.error('Refresh Error:', e); }
+    }
+
+    configForm.onsubmit = async (e) => {
+        e.preventDefault();
+        const btn = configForm.querySelector('button[type="submit"]');
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+
+        const cookiesValue = document.getElementById('cookies').value.trim();
+        
+        try {
+            if (cookiesValue) {
+                const cookieRes = await fetch('/api/update-cookies', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ cookies: cookiesValue })
+                });
+                if (!cookieRes.ok) throw new Error('Cookie update failed');
+            }
+
+            const payload = {
+                BOTNAME: document.getElementById('botName').value,
+                ADMIN_NAME: document.getElementById('adminName').value,
+                PREFIX: document.getElementById('prefix').value,
+                ADMINBOT: document.getElementById('adminUid').value.split(',').map(s => s.trim()).filter(s => s)
+            };
+
+            const res = await fetch('/api/update', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            
+            if (res.ok) {
+                Swal.fire({
+                    toast: true,
+                    position: 'top-end',
+                    icon: 'success',
+                    title: cookiesValue ? 'Cookies Saved & Bot Ready!' : 'Settings Saved',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    background: '#111827',
+                    color: '#fff'
+                });
+                document.getElementById('cookies').value = '';
+            }
+        } catch (e) {
+            Swal.fire({ icon: 'error', title: 'Upload Failed', background: '#111827', color: '#fff' });
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-cloud-upload-alt"></i> Deploy & Save Changes';
+        }
+    };
+
+    const apiAction = async (endpoint, title) => {
+        const btn = event.currentTarget;
+        const original = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+        
+        try {
+            await fetch(endpoint, { method: 'POST' });
+            fetchUpdate();
+        } catch (e) {
+            Swal.fire({ icon: 'error', title: 'Action Failed', background: '#111827', color: '#fff' });
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = original;
+        }
+    };
+
+    document.getElementById('startBtn').onclick = (e) => apiAction('/api/start');
+    document.getElementById('stopBtn').onclick = (e) => apiAction('/api/stop');
+    document.getElementById('clearAppStateBtn').onclick = async () => {
+        const result = await Swal.fire({
+            title: 'Wipe Session?',
+            text: "This will log the bot out and delete stored credentials.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#ef4444',
+            background: '#111827',
+            color: '#fff'
+        });
+        if (result.isConfirmed) {
+            await fetch('/api/delete-appstate', { method: 'POST' });
+            if (await fs) {
+                await fetch('/api/update-cookies', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ cookies: '' })
+                });
+            }
+            fetchUpdate();
+        }
+    };
+
+    setInterval(fetchUpdate, 3000);
+    fetchUpdate();
+</script>
+</body>
+</html>

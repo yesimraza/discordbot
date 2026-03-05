@@ -1,0 +1,56 @@
+{
+        "Language": "en",
+        "PreKey": "KashifRaza",
+        "AutoUpdate": false,
+        "MainColor": "#9900FF",
+        "MainName": "[ FCA-HZI ]",
+        "Uptime": true,
+        "Config": "default",
+        "DevMode": true,
+        "Login2Fa": false,
+        "AutoLogin": false,
+        "BroadCast": true,
+        "AuthString": "",
+        "EncryptFeature": false,
+        "ResetDataLogin": false,
+        "AutoInstallNode": true,
+        "AntiSendAppState": true,
+        "AutoRestartMinutes": 0,
+        "RestartMQTT_Minutes": 60,
+        "Websocket_Extension": {
+                "Status": true,
+                "ResetData": false,
+                "AppState_Path": "appstate.json"
+        },
+        "HTML": {
+                "HTML": false,
+                "UserName": "KashifRaza",
+                "MusicLink": "https://files.catbox.moe/h6dtdh.mp3"
+        },
+        "AntiGetInfo": {
+                "Database_Type": "default",
+                "AntiGetThreadInfo": false,
+                "AntiGetUserInfo": false
+        },
+        "Stable_Version": {
+                "Accept": false,
+                "Version": ""
+        },
+        "CheckPointBypass": {
+                "956": {
+                        "Allow": false,
+                        "Difficult": "Easy",
+                        "Notification": "Turn on with AutoLogin!"
+                }
+        },
+        "AntiStuckAndMemoryLeak": {
+                "AutoRestart": {
+                        "Use": false,
+                        "Explain": "When this feature is turned on, the system will continuously check and confirm that if memory usage reaches 90%, it will automatically restart to avoid freezing or stopping."
+                },
+                "LogFile": {
+                        "Use": false,
+                        "Explain": "Record memory usage logs to fix errors. Default location: Raza_DataBase/memory.logs"
+                }
+        }
+}

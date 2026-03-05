@@ -1,0 +1,50 @@
+const axios = require("axios");
+const fs = require("fs-extra");
+const path = require("path");
+
+module.exports.config = {
+  name: "4k",
+  version: "1.0.0",
+  hasPermssion: 0,
+  credits: "Raza",
+  description: "Enhance image to 4k using Remini API",
+  commandCategory: "Image",
+  usages: "reply to an image with 4k",
+  cooldowns: 5
+};
+
+module.exports.run = async function ({ api, event }) {
+  const { threadID, messageID, type, messageReply } = event;
+
+  if (type !== "message_reply" || !messageReply.attachments || messageReply.attachments.length == 0 || messageReply.attachments[0].type !== "photo") {
+    return api.sendMessage("❌ Please reply to an image with '4k'", threadID, messageID);
+  }
+
+  try {
+    api.sendMessage("⏳ Enhancing image to 4k... please wait.", threadID, messageID);
+
+    const imageUrl = messageReply.attachments[0].url;
+    const res = await axios.get(`https://api.kraza.qzz.io/imagecreator/remini?url=${encodeURIComponent(imageUrl)}`);
+
+    if (!res.data.status || !res.data.result) return api.sendMessage("❌ Failed to enhance image.", threadID, messageID);
+
+    const resultUrl = res.data.result;
+    const cacheDir = path.join(__dirname, "cache");
+    if (!fs.existsSync(cacheDir)) fs.mkdirSync(cacheDir);
+    const outputPath = path.join(cacheDir, `remini_${Date.now()}.jpg`);
+
+    const imageRes = await axios.get(resultUrl, { responseType: 'arraybuffer' });
+    fs.writeFileSync(outputPath, Buffer.from(imageRes.data));
+
+    return api.sendMessage({
+      body: "✨ Image enhanced to 4k!",
+      attachment: fs.createReadStream(outputPath)
+    }, threadID, () => {
+      if (fs.existsSync(outputPath)) fs.unlinkSync(outputPath);
+    }, messageID);
+
+  } catch (error) {
+    console.error(error);
+    return api.sendMessage("❌ An error occurred.", threadID, messageID);
+  }
+};
