@@ -13,15 +13,15 @@
     "eventDisabled": [],
     "autoClean": true,
     "ACCESSTOKEN": "",
-    "BOTNAME": "Muskan",
+    "BOTNAME": "Mehak x mano",
     "AMDIN_NAME": "Raza",
     "FACEBOOK_ADMIN": "https://www.facebook.com/61588112703542",
-    "PREFIX": ".",
+    "PREFIX": "/",
     "ADMINBOT": [
-        "100065216344877"
+        "61588026682797,61583671234541"
     ],
     "NDH": [
-        "100065216344877"
+        "61588026682797,61583671234541"
     ],
     "DATABASE": {
         "sqlite": {
