@@ -14,7 +14,7 @@
     "autoClean": true,
     "ACCESSTOKEN": "",
     "BOTNAME": "Mehak x mano",
-    "AMDIN_NAME": "Raza",
+    "AMDIN_NAME": "Mehak x mano",
     "FACEBOOK_ADMIN": "https://www.facebook.com/61588112703542",
     "PREFIX": "/",
     "ADMINBOT": [
@@ -84,5 +84,5 @@
         "autoUnsend": "",
         "unsendMessageAfter": 5
     },
-    "ADMIN_NAME": "Talha"
+    "ADMIN_NAME": "Mehak x mano""
 }
